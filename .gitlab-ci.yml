@@ -1,0 +1,50 @@
+stages:
+  - init
+  - validate
+  - plan
+  - apply
+  - destroy
+  - .terraform-rule
+
+# Define the jobs for each stage
+init:
+  stage: init
+  script:
+    - echo "Initializing Terraform..."
+    - cd terraform
+    - terraform init
+
+validate:
+  stage: validate
+  script:
+    - echo "Validating Terraform configuration..."
+    - cd terraform
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - echo "Planning Terraform deployment..."
+    - cd terraform
+    - terraform plan
+
+apply:
+  stage: apply
+  when: manual # Manual intervention required to apply changes
+  script:
+    - echo "Applying Terraform changes..."
+    - cd terraform
+    - terraform apply
+
+destroy:
+  stage: destroy
+  script:
+    - echo "Destroying Terraform resources..."
+    - cd terraform
+    - terraform destroy -auto-approve
+
+# Define the hidden stage for repeatable tasks
+.terraform-rule:
+  stage: .terraform-rule
+  script:
+    - echo "Running repeatable Terraform tasks..."
